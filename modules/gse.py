@@ -6,7 +6,7 @@ import subprocess
 Steam_api = None
 steam_api_path = None
 
-def apply(config, resultados, directorio_ejecucion):
+def apply(config, resultados):
     """Aplica el crack GSE"""
     global Steam_api, steam_api_path, ruta_backup  # ← DECLARAR GLOBAL
     
@@ -17,7 +17,9 @@ def apply(config, resultados, directorio_ejecucion):
     
     # Buscar steam_api
     nombreApi = None
+    Steam_api = None
     for ruta in resultados:
+        print(ruta)
         nombreApi = os.path.basename(ruta)
         if nombreApi in ["steam_api64.dll", "steam_api.dll"]:
             Steam_api = ruta  # Global

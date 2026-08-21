@@ -12,17 +12,18 @@ from modules import steamclient
 from modules import steamless
 
 def main():
-    if len(sys.argv) < 3:
-        print("Uso: python main.py [gse|steamclient|unsteam|steamless] <APPID>")
+    if len(sys.argv) < 2:
+        print("Uso: python main.py [gse|steamclient|unsteam|unsteam-wimm|steamless] <APPID>")
         print("  gse         - aplicar solo GSE")
         print("  steamclient - aplicar GSE y steamclient")
         print("  unsteam     - aplicar unsteam")
+        print("  unsteam-wimm - aplicar unsteam y wimm")
         print("  steamless   - Desempaquetar .exe con Steamless")
         sys.exit(1)
     
     comando = sys.argv[1].lower()
     
-    if comando not in ["gse", "steamclient", "unsteam", "steamless"]:
+    if comando not in ["gse", "steamclient", "unsteam", "unsteam-wimm", "steamless", "dryrun"]:
         print(f"Error: Comando '{comando}' no reconocido")
         sys.exit(1)
     
@@ -101,12 +102,15 @@ def main():
     # ============================================================
     # SOLICITAR APPID
     # ============================================================
-    if len(sys.argv) > 2:
-        # Si existe, lo tomamos y lo pasamos a minúsculas
-        APPID = sys.argv[2].lower()
-    else:
-        # Si falta el segundo argumento, se lo pedimos al usuario
-        APPID = input("Falta el segundo parámetro. Por favor, ingrésalo: ").lower()
+    APPID = None
+    if comando not in ["steamless", "dryrun"]:
+        if len(sys.argv) > 2:
+            # Si existe, lo tomamos y lo pasamos a minúsculas
+            APPID = sys.argv[2].lower()
+        else:
+            # Si falta el segundo argumento, se lo pedimos al usuario
+            while not APPID or not APPID.isdigit():
+                APPID = input("Digite el APPID: ").lower()
     
     # ============================================================
     # EJECUTAR COMANDO
@@ -116,17 +120,30 @@ def main():
     if comando == "gse":
         patrones = ["steam_api64.dll", "steam_api.dll"]
         resultados = buscar_archivos(directorio_ejecucion, patrones)
-        gse.apply(config, resultados, directorio_ejecucion)
+        gse.apply(config, resultados)
         gse.generate_emu_config(config, credenciales, directorio_ejecucion, sistema_operativo, APPID, steamclient=False)
-    
     elif comando == "steamclient":
-        print("⚠️ Módulo SteamClient en desarrollo")
-        sys.exit(0)
+        patrones = ["*.exe"]
+        resultados = buscar_archivos(directorio_ejecucion, patrones)
+        steamclient.apply(config, resultados, directorio_ejecucion, APPID)
+        gse.generate_emu_config(config, credenciales, directorio_ejecucion, sistema_operativo, APPID, steamclient=True)
     elif comando == "unsteam":
-        print("⚠️ Módulo Unsteam en desarrollo")
-        sys.exit(0)
+        patrones = ["*.exe"]
+        resultados = buscar_archivos(directorio_ejecucion, patrones)
+        unsteam.apply(config, resultados, directorio_ejecucion, APPID, wimm=False)
+    elif comando == "unsteam-wimm":
+        patrones = ["*.exe"]
+        resultados = buscar_archivos(directorio_ejecucion, patrones)
+        unsteam.apply(config, resultados, directorio_ejecucion, APPID, wimm=True)
     elif comando == "steamless":
-        print("⚠️ Módulo Steamless en desarrollo")
+        patrones = ["*.exe"]
+        resultados = buscar_archivos(directorio_ejecucion, patrones)
+        steamless.apply(config, resultados, directorio_ejecucion, sistema_operativo)
+    elif comando == "dryrun":
+        patrones = ["*.exe", "steam_api64.dll", "steam_api.dll"]
+        resultados = buscar_archivos(directorio_ejecucion, patrones)
+        for ruta in resultados:
+            print(ruta)
         sys.exit(0)
     
     print("\n" + "="*50)

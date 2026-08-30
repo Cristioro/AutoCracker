@@ -1,15 +1,15 @@
 {
     "GSE": {
-        "win" : "/home/cristioro/Elenemigos/Golberg & cracks/GSE/GSE_Win",
-        "linux" : "/home/cristioro/Elenemigos/Golberg & cracks/GSE/GSE_Linux",
-        "Gen_win" : "/home/cristioro/Elenemigos/Golberg & cracks/GSE/gen_emu_config_old-win",
-        "Gen_linux" : "/home/cristioro/Elenemigos/Golberg & cracks/GSE/gen_emu_config_old-linux",
-        "steamSettings" : "/home/cristioro/Elenemigos/Golberg & cracks/GSE/steam_settings"
+        "win" : "./Assets/GSE/GSE_Win",
+        "linux" : "./Assets/GSE/GSE_Linux",
+        "Gen_win" : "./Assets/GSE/gen_emu_config_old-win",
+        "Gen_linux" : "./Assets/GSE/gen_emu_config_old-linux",
+        "steamSettings" : "./Assets/GSE/steam_settings"
     },
     "Unsteam": {
-        "x64": "/home/cristioro/Elenemigos/Golberg & cracks/Unsteam/Unsteam_x64_Release",
-        "x86": "/home/cristioro/Elenemigos/Golberg & cracks/Unsteam/Unsteam_x86_Release",
-        "wimm": "/home/cristioro/Elenemigos/Golberg & cracks/Unsteam/wimm"
+        "x64": "./Assets/Unsteam/Unsteam_x64_Release",
+        "x86": "./Assets/Unsteam/Unsteam_x86_Release",
+        "wimm": "./Assets/Unsteam/wimm"
     },
-    "Steamless": "/home/cristioro/Elenemigos/Golberg & cracks/Steamless"
+    "Steamless": "./Assets/Steamless"
 }

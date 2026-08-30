@@ -105,12 +105,25 @@ def main():
     APPID = None
     if comando not in ["steamless", "dryrun"]:
         if len(sys.argv) > 2:
-            # Si existe, lo tomamos y lo pasamos a minúsculas
-            APPID = sys.argv[2].lower()
+            # Si existe en los argumentos, lo tomamos y limpiamos
+            APPID = sys.argv[2].strip()
+        elif os.path.exists("appid.txt"):
+            with open("appid.txt", "r", encoding="utf-8") as f:
+                contenido = f.read().strip()
+                
+                # VARIABLE DE SEGURIDAD: Verifica si son solo números
+                if contenido.isdigit():
+                    APPID = contenido
+                else:
+                    print("Error: El archivo 'appid.txt' contiene letras o caracteres no válidos.")
+                    APPID = "" # Se deja vacío para que entre al bucle 'while' de abajo
         else:
-            # Si falta el segundo argumento, se lo pedimos al usuario
-            while not APPID or not APPID.isdigit():
-                APPID = input("Digite el APPID: ").lower()
+            # Si no hay archivo, se inicializa vacío para el bucle
+            APPID = ""
+
+        # Si falta el APPID o no pasó la seguridad de ser solo números, se le pide al usuario
+        while not APPID or not APPID.isdigit():
+            APPID = input("Digite el APPID (solo números): ").strip()
     
     # ============================================================
     # EJECUTAR COMANDO
